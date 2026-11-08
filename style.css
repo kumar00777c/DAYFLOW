@@ -240,3 +240,40 @@ canvas {
         height: 135px;
     }
 }
+
+
+/* ==========================================
+   DAYFLOW - MOBILE ACTIVE PROJECTS FIX
+   ========================================== */
+
+.project-row {
+    width: 100%;
+    min-width: 0;
+}
+
+.project-info {
+    flex: 1 1 0%;
+    width: 0;
+    min-width: 0;
+}
+
+.project-info small {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    overflow-wrap: anywhere;
+    line-height: 1.5;
+    max-width: 100%;
+}
+
+.tiny-progress {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.tiny-progress span {
+    max-width: 100%;
+}
