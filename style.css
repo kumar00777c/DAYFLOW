@@ -147,3 +147,96 @@
 .footer {
     color: #71839A;
 }
+
+
+/* ==========================================
+   DAYFLOW - MOBILE CHART & OVERFLOW FIX
+   ========================================== */
+
+/* Prevent unwanted horizontal page scrolling */
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.app-shell {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+}
+
+.main-area {
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: clip;
+}
+
+.view {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Keep dashboard sections inside their containers */
+.dashboard-grid,
+.reports-grid,
+.panel,
+.chart-panel,
+.weekly-panel {
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* Fix dashboard chart container */
+.mini-chart-wrap {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: 145px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Fix reports chart container */
+.large-chart-wrap {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: 290px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Critical: constrain canvas to its parent */
+canvas {
+    display: block;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    background: transparent;
+}
+
+/* Prevent report content from overflowing */
+.chart-legend {
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+@media (max-width: 700px) {
+    .main-area,
+    .dashboard-grid,
+    .reports-grid {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .large-chart-wrap {
+        height: 250px;
+    }
+
+    .mini-chart-wrap {
+        height: 135px;
+    }
+}
