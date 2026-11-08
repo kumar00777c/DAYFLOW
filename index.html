@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111512">
+  <title>DAYFLOW — Personal Command Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="DAYFLOW home">
+        <span class="brand-mark">D</span><span class="brand-name">DAYFLOW</span>
+      </a>
+      <div class="nav-caption">WORKSPACE</div>
+      <nav class="navigation" aria-label="Main navigation">
+        <button class="nav-link active" data-view="dashboard"><span class="nav-icon">▦</span>Dashboard</button>
+        <button class="nav-link" data-view="tasks"><span class="nav-icon">✓</span>Daily tasks</button>
+        <button class="nav-link" data-view="projects"><span class="nav-icon">▤</span>Projects</button>
+        <button class="nav-link" data-view="reports"><span class="nav-icon">◷</span>Reports</button>
+        <button class="nav-link" data-view="settings"><span class="nav-icon">⚙</span>Settings</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="local-indicator"><span class="status-dot"></span><span>Saved on this device</span></div>
+        <div class="version-label">DAYFLOW · LOCAL EDITION</div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Toggle menu">☰</button>
+        <div>
+          <div class="breadcrumb">PERSONAL WORKSPACE <span>/</span> <span id="breadcrumbCurrent">DASHBOARD</span></div>
+          <h1 id="pageTitle">Dashboard</h1>
+        </div>
+        <div class="topbar-actions">
+          <div class="today-chip" id="headerDate"></div>
+          <div class="avatar" title="Your workspace">K</div>
+        </div>
+      </header>
+
+      <section class="view active" id="view-dashboard">
+        <div class="welcome-banner">
+          <div>
+            <div class="eyebrow">YOUR PERSONAL COMMAND CENTER</div>
+            <h2 id="greeting">Good morning.</h2>
+            <p>Make today count. One task at a time.</p>
+          </div>
+          <div class="welcome-mark" aria-hidden="true">✳</div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-top"><span>Today's tasks</span><span class="stat-icon">☷</span></div><strong id="dashTotal">0</strong><small>Scheduled for today</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Completed</span><span class="stat-icon">✓</span></div><strong id="dashCompleted">0</strong><small>Successfully finished</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Remaining</span><span class="stat-icon">◷</span></div><strong id="dashPending">0</strong><small>Still on your list</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Active projects</span><span class="stat-icon">▤</span></div><strong id="dashProjects">0</strong><small>Currently in progress</small></article>
+        </div>
+
+        <div class="dashboard-grid">
+          <section class="panel">
+            <div class="panel-heading">
+              <div><h3>Today's tasks</h3><p>Keep your day moving.</p></div>
+              <button class="button button-primary button-small" id="dashAddTask">＋ Add task</button>
+            </div>
+            <div class="progress-block">
+              <div class="progress-label"><span>Daily progress</span><strong id="dashProgressLabel">0%</strong></div>
+              <div class="progress-track"><div class="progress-value" id="dashProgressBar"></div></div>
+            </div>
+            <div id="dashTaskList" class="task-list"></div>
+            <div class="empty-state" id="dashTaskEmpty">Nothing on your list yet. Add a task to get started.</div>
+            <button class="text-button" data-go="tasks">View all tasks <span>→</span></button>
+          </section>
+
+          <section class="panel">
+            <div class="panel-heading">
+              <div><h3>Active projects</h3><p>Your work in progress.</p></div>
+              <button class="button button-quiet button-small" data-go="projects">View all</button>
+            </div>
+            <div id="dashProjectList" class="project-list"></div>
+            <div class="empty-state" id="dashProjectEmpty">No active projects yet. Add one when you're ready.</div>
+          </section>
+        </div>
+
+        <section class="panel weekly-panel">
+          <div class="panel-heading">
+            <div><h3>This week's momentum</h3><p>Tasks completed each day.</p></div>
+            <button class="text-button" data-go="reports">Full reports <span>→</span></button>
+          </div>
+          <div class="mini-chart-wrap"><canvas id="miniChart" aria-label="Tasks completed this week"></canvas></div>
+        </section>
+      </section>
+
+      <section class="view" id="view-tasks">
+        <div class="page-intro">
+          <div><h2>Daily tasks</h2><p>Plan your day and keep track of what gets done.</p></div>
+          <button class="button button-primary" id="addTaskButton">＋ Add task</button>
+        </div>
+        <div class="toolbar">
+          <label class="date-control">Selected day <input type="date" id="taskDate"></label>
+          <div class="filter-tabs" id="taskFilters">
+            <button class="filter-tab active" data-filter="all">All</button>
+            <button class="filter-tab" data-filter="pending">Pending</button>
+            <button class="filter-tab" data-filter="completed">Completed</button>
+          </div>
+        </div>
+        <div class="task-summary panel">
+          <div><span class="muted-label">DAY COMPLETION</span><strong id="taskPageProgress">0%</strong></div>
+          <div class="progress-track"><div class="progress-value" id="taskPageProgressBar"></div></div>
+          <p id="taskPageSummary">0 of 0 tasks completed</p>
+        </div>
+        <div class="panel task-page-panel">
+          <div id="fullTaskList" class="full-task-list"></div>
+          <div class="empty-state" id="taskPageEmpty">No tasks for this day. Add one above.</div>
+        </div>
+      </section>
+
+      <section class="view" id="view-projects">
+        <div class="page-intro">
+          <div><h2>Projects</h2><p>Keep your ongoing ideas and work organized.</p></div>
+          <button class="button button-primary" id="addProjectButton">＋ Add project</button>
+        </div>
+        <div class="project-filters filter-tabs" id="projectFilters">
+          <button class="filter-tab active" data-project-filter="all">All</button>
+          <button class="filter-tab" data-project-filter="active">Active</button>
+          <button class="filter-tab" data-project-filter="paused">On hold</button>
+          <button class="filter-tab" data-project-filter="completed">Completed</button>
+        </div>
+        <div class="projects-grid" id="fullProjectList"></div>
+        <div class="empty-state panel" id="projectPageEmpty">No projects here yet. Add your first project.</div>
+      </section>
+
+      <section class="view" id="view-reports">
+        <div class="page-intro">
+          <div><h2>Reports & insights</h2><p>A clearer picture of your consistency over time.</p></div>
+          <label class="date-control">Period
+            <select id="reportRange"><option value="7">Last 7 days</option><option value="14">Last 14 days</option><option value="30">Last 30 days</option></select>
+          </label>
+        </div>
+        <div class="stats-grid report-stats">
+          <article class="stat-card"><div class="stat-top"><span>Tasks created</span><span class="stat-icon">☷</span></div><strong id="reportTotal">0</strong><small>In selected period</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Completed</span><span class="stat-icon">✓</span></div><strong id="reportCompleted">0</strong><small>Marked as done</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Left pending</span><span class="stat-icon">◷</span></div><strong id="reportPending">0</strong><small>Not completed</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Completion rate</span><span class="stat-icon">％</span></div><strong id="reportRate">0%</strong><small>Completed / created</small></article>
+        </div>
+        <div class="reports-grid">
+          <section class="panel chart-panel">
+            <div class="panel-heading"><div><h3>Completed vs pending</h3><p>Daily task breakdown for the selected period.</p></div></div>
+            <div class="chart-legend"><span><i class="legend-dot completed-dot"></i>Completed</span><span><i class="legend-dot pending-dot"></i>Pending</span></div>
+            <div class="large-chart-wrap"><canvas id="reportChart" aria-label="Completed and pending tasks by day"></canvas></div>
+          </section>
+          <section class="panel">
+            <div class="panel-heading"><div><h3>At a glance</h3><p>Your selected-period summary.</p></div></div>
+            <div class="insight-row"><span>Best day</span><strong id="bestDay">—</strong></div>
+            <div class="insight-row"><span>Average tasks / day</span><strong id="dailyAverage">0</strong></div>
+            <div class="insight-row"><span>Active projects</span><strong id="reportProjects">0</strong></div>
+            <div class="insight-note">A pending task is counted against the day it was scheduled for. You can still review previous days using the date selector in Daily tasks.</div>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" id="view-settings">
+        <div class="page-intro"><div><h2>Settings & data</h2><p>Your workspace is stored locally in this browser.</p></div></div>
+        <div class="settings-grid">
+          <section class="panel settings-card">
+            <div class="settings-icon">⇩</div><h3>Export your data</h3><p>Download a JSON backup of all your tasks and projects. Keep it somewhere safe.</p>
+            <button class="button button-primary" id="exportButton">Export backup</button>
+          </section>
+          <section class="panel settings-card">
+            <div class="settings-icon">⇧</div><h3>Import a backup</h3><p>Restore DAYFLOW data from a previously exported JSON backup.</p>
+            <label class="button button-secondary file-button">Choose backup<input type="file" id="importInput" accept=".json,application/json"></label>
+          </section>
+          <section class="panel settings-card danger-card">
+            <div class="settings-icon">⌫</div><h3>Clear all data</h3><p>Permanently remove all DAYFLOW tasks and projects from this browser. Export a backup first if needed.</p>
+            <button class="button button-danger" id="clearButton">Clear workspace data</button>
+          </section>
+          <section class="panel settings-card">
+            <div class="settings-icon">◉</div><h3>Local-first by design</h3><p>No account, backend or cloud sync. Your information stays in this browser profile. Clearing browser site data can remove it.</p>
+            <div class="local-badge"><span class="status-dot"></span> Local storage active</div>
+          </section>
+        </div>
+      </section>
+
+      <footer class="footer">DAYFLOW <span>·</span> A little more intention, every day.</footer>
+    </main>
+  </div>
+
+  <dialog id="taskDialog" class="modal">
+    <form id="taskForm" class="modal-card">
+      <div class="modal-heading"><div><div class="eyebrow">DAILY PLANNING</div><h2 id="taskDialogTitle">Add a task</h2></div><button type="button" class="icon-button" data-close="taskDialog">×</button></div>
+      <input type="hidden" id="taskId">
+      <label>Task name<input id="taskName" type="text" maxlength="120" placeholder="e.g. Work on personal project" required></label>
+      <div class="form-row">
+        <label>Date<input id="taskDueDate" type="date" required></label>
+        <label>Priority<select id="taskPriority"><option value="normal">Normal</option><option value="high">High</option><option value="low">Low</option></select></label>
+      </div>
+      <label>Notes <span class="optional">(optional)</span><textarea id="taskNotes" rows="3" maxlength="500" placeholder="Add a little context..."></textarea></label>
+      <div class="modal-actions"><button type="button" class="button button-secondary" data-close="taskDialog">Cancel</button><button type="submit" class="button button-primary">Save task</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="projectDialog" class="modal">
+    <form id="projectForm" class="modal-card">
+      <div class="modal-heading"><div><div class="eyebrow">PROJECT WORKSPACE</div><h2 id="projectDialogTitle">Add a project</h2></div><button type="button" class="icon-button" data-close="projectDialog">×</button></div>
+      <input type="hidden" id="projectId">
+      <label>Project name<input id="projectName" type="text" maxlength="80" placeholder="e.g. Personal website" required></label>
+      <label>Description<textarea id="projectDescription" rows="2" maxlength="300" placeholder="What is this project about?"></textarea></label>
+      <div class="form-row">
+        <label>Status<select id="projectStatus"><option value="active">Active</option><option value="paused">On hold</option><option value="completed">Completed</option></select></label>
+        <label>Progress <span id="progressInputValue">0%</span><input id="projectProgress" type="range" min="0" max="100" value="0"></label>
+      </div>
+      <label>Deadline <span class="optional">(optional)</span><input id="projectDeadline" type="date"></label>
+      <div class="modal-actions"><button type="button" class="button button-secondary" data-close="projectDialog">Cancel</button><button type="submit" class="button button-primary">Save project</button></div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
