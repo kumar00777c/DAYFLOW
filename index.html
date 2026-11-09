@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#111512">
   <title>DAYFLOW — Personal Command Center</title>
   <!-- DAYFLOW App Icons -->
   <link rel="icon" href="./icons/favicon.ico">
@@ -226,5 +225,14 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="app.js"></script>
+  <script>
+    // Register the offline cache only in secure contexts (HTTPS or localhost).
+    if ("serviceWorker" in navigator && window.isSecureContext) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js", { scope: "./" })
+          .catch(error => console.error("DAYFLOW service worker registration failed:", error));
+      });
+    }
+  </script>
 </body>
 </html>
